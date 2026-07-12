@@ -25,4 +25,7 @@ COPY src/ ./src/
 COPY scripts/entrypoint.sh ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 
+# compile the MPI program
+RUN mpic++ -o ./src/matrix_mult ./src/matrix_mult.cpp
+
 ENTRYPOINT ["./entrypoint.sh"]
