@@ -1,8 +1,0 @@
-[
-{
-  "directory": "/home/irvin-oc/mpi-matrix-bench/build",
-  "command": "/usr/bin/c++  -isystem /usr/lib/x86_64-linux-gnu/openmpi/include -isystem /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi  -D_FILE_OFFSET_BITS=64 -g -Wall --pedantic -g -O0 -D_DEBUG -std=gnu++17 -o CMakeFiles/matrix_mult.dir/src/matrix_mult.cpp.o -c /home/irvin-oc/mpi-matrix-bench/src/matrix_mult.cpp",
-  "file": "/home/irvin-oc/mpi-matrix-bench/src/matrix_mult.cpp",
-  "output": "CMakeFiles/matrix_mult.dir/src/matrix_mult.cpp.o"
-}
-]

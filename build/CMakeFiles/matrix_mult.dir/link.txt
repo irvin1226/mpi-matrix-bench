@@ -1,1 +1,0 @@
-/usr/bin/c++  -D_FILE_OFFSET_BITS=64 -g -Wall --pedantic -g -O0 -D_DEBUG CMakeFiles/matrix_mult.dir/src/matrix_mult.cpp.o -o /home/irvin-oc/mpi-matrix-bench/matrix_mult  -Wl,-rpath,/usr/lib/x86_64-linux-gnu/openmpi/lib /usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi_cxx.so /usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi.so 
