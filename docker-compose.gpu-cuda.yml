@@ -1,0 +1,45 @@
+version: '3.8'
+
+networks:
+  mpi-network:
+    driver: bridge
+
+services:
+  master:
+    build: .
+    hostname: master
+    environment:
+      - MPI_ROLE=master
+      - MPI_PROCESSES=2
+      - MPI_PROFILE=gpu-cuda
+    volumes:
+      - ./results:/app/results
+    networks:
+      - mpi-network
+    mem_limit: 256m
+    depends_on:
+      - node1
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  node1:
+    build: .
+    hostname: node1
+    environment:
+      - MPI_ROLE=worker
+      - MPI_PROFILE=gpu-cuda
+    networks:
+      - mpi-network
+    mem_limit: 256m
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
