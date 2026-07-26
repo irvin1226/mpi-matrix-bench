@@ -25,7 +25,10 @@ COPY src/ ./src/
 COPY scripts/entrypoint.sh ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 
-# compile the MPI program
-RUN mpic++ -o ./src/matrix_mult ./src/matrix_mult.cpp
+# which profile's source file to compile, set at build time (naive, optimized, gpu)
+ARG PROFILE=naive
+
+# compile only the source file matching this profile
+RUN mpic++ -o ./src/matrix_mult ./src/matrix_mult_${PROFILE}.cpp
 
 ENTRYPOINT ["./entrypoint.sh"]

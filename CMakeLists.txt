@@ -11,8 +11,14 @@ set(CMAKE_BUILD_TYPE Debug)
 
 find_package(MPI REQUIRED)
 
-set(SOURCE_FILES src/matrix_mult.cpp)
-add_executable(matrix_mult ${SOURCE_FILES})
+add_executable(matrix_mult_naive src/matrix_mult_naive.cpp)
+target_link_libraries(matrix_mult_naive MPI::MPI_CXX)
+target_include_directories(matrix_mult_naive PRIVATE ${MPI_CXX_INCLUDE_DIRS})
 
-target_link_libraries(matrix_mult MPI::MPI_CXX)
-target_include_directories(matrix_mult PRIVATE ${MPI_CXX_INCLUDE_DIRS})
+add_executable(matrix_mult_optimized src/matrix_mult_optimized.cpp)
+target_link_libraries(matrix_mult_optimized MPI::MPI_CXX)
+target_include_directories(matrix_mult_optimized PRIVATE ${MPI_CXX_INCLUDE_DIRS})
+
+add_executable(matrix_mult_gpu src/matrix_mult_gpu.cpp)
+target_link_libraries(matrix_mult_gpu MPI::MPI_CXX)
+target_include_directories(matrix_mult_gpu PRIVATE ${MPI_CXX_INCLUDE_DIRS})

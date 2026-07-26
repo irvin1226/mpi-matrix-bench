@@ -1,0 +1,127 @@
+networks:
+  mpi-network:
+    driver: bridge
+
+services:
+  master:
+    build:
+      context: .
+      args:
+        PROFILE: ${PROFILE}
+    hostname: master
+    environment:
+      - MPI_ROLE=master
+      - MPI_PROCESSES=${MPI_PROCESSES}
+      - MPI_PROFILE=${MPI_PROFILE}
+      - MPI_NODE_COUNT=${MPI_NODE_COUNT}
+      - MATRIX_SIZE=${MATRIX_SIZE}
+    volumes:
+      - ./results:/app/results
+    networks:
+      - mpi-network
+    mem_limit: ${MEM_LIMIT}
+
+  node1:
+    build:
+      context: .
+      args:
+        PROFILE: ${PROFILE}
+    hostname: node1
+    environment:
+      - MPI_ROLE=worker
+      - MPI_PROFILE=${MPI_PROFILE}
+      - MPI_NODE_COUNT=${MPI_NODE_COUNT}
+      - MATRIX_SIZE=${MATRIX_SIZE}
+    networks:
+      - mpi-network
+    mem_limit: ${MEM_LIMIT}
+
+  node2:
+    build:
+      context: .
+      args:
+        PROFILE: ${PROFILE}
+    hostname: node2
+    environment:
+      - MPI_ROLE=worker
+      - MPI_PROFILE=${MPI_PROFILE}
+      - MPI_NODE_COUNT=${MPI_NODE_COUNT}
+      - MATRIX_SIZE=${MATRIX_SIZE}
+    networks:
+      - mpi-network
+    mem_limit: ${MEM_LIMIT}
+
+  node3:
+    build:
+      context: .
+      args:
+        PROFILE: ${PROFILE}
+    hostname: node3
+    environment:
+      - MPI_ROLE=worker
+      - MPI_PROFILE=${MPI_PROFILE}
+      - MPI_NODE_COUNT=${MPI_NODE_COUNT}
+      - MATRIX_SIZE=${MATRIX_SIZE}
+    networks:
+      - mpi-network
+    mem_limit: ${MEM_LIMIT}
+
+  node4:
+    build:
+      context: .
+      args:
+        PROFILE: ${PROFILE}
+    hostname: node4
+    environment:
+      - MPI_ROLE=worker
+      - MPI_PROFILE=${MPI_PROFILE}
+      - MPI_NODE_COUNT=${MPI_NODE_COUNT}
+      - MATRIX_SIZE=${MATRIX_SIZE}
+    networks:
+      - mpi-network
+    mem_limit: ${MEM_LIMIT}
+
+  node5:
+    build:
+      context: .
+      args:
+        PROFILE: ${PROFILE}
+    hostname: node5
+    environment:
+      - MPI_ROLE=worker
+      - MPI_PROFILE=${MPI_PROFILE}
+      - MPI_NODE_COUNT=${MPI_NODE_COUNT}
+      - MATRIX_SIZE=${MATRIX_SIZE}
+    networks:
+      - mpi-network
+    mem_limit: ${MEM_LIMIT}
+
+  node6:
+    build:
+      context: .
+      args:
+        PROFILE: ${PROFILE}
+    hostname: node6
+    environment:
+      - MPI_ROLE=worker
+      - MPI_PROFILE=${MPI_PROFILE}
+      - MPI_NODE_COUNT=${MPI_NODE_COUNT}
+      - MATRIX_SIZE=${MATRIX_SIZE}
+    networks:
+      - mpi-network
+    mem_limit: ${MEM_LIMIT}
+
+  node7:
+    build:
+      context: .
+      args:
+        PROFILE: ${PROFILE}
+    hostname: node7
+    environment:
+      - MPI_ROLE=worker
+      - MPI_PROFILE=${MPI_PROFILE}
+      - MPI_NODE_COUNT=${MPI_NODE_COUNT}
+      - MATRIX_SIZE=${MATRIX_SIZE}
+    networks:
+      - mpi-network
+    mem_limit: ${MEM_LIMIT}

@@ -2,13 +2,16 @@
 #include <mpi.h>
 #include <vector>
 #include <chrono>
-
-const int MATRIX_SIZE = 1024;
+#include <cstdlib>
+#include <string>
+#include <cmath>
 
 void initMatrix(std::vector<double> &matrix, int size)
 {
     for (int i = 0; i < (size * size); i++)
     {
+        // bound values between 0.0 and 0.99 using modulo so numbers stay
+        // small and reproducible instead of growing unbounded with i
         matrix[i] = static_cast<double>(i % 100) / 100.0;
     }
 }
@@ -43,7 +46,15 @@ int main(int argc, char *argv[])
     int mpiSize;
     MPI_Comm_size(MPI_COMM_WORLD, &mpiSize);
 
-    int size = MATRIX_SIZE;
+    const char *matrixSizeEnv = std::getenv("MATRIX_SIZE");
+
+    if (matrixSizeEnv == nullptr)
+    {
+        std::cout << "ERROR: MATRIX_SIZE environment variable not set!\n";
+        return EXIT_FAILURE;
+    }
+
+    int size = std::stoi(matrixSizeEnv);
     int rowsPerProcess = size / mpiSize;
 
     std::vector<double> A(size * size);
@@ -81,6 +92,9 @@ int main(int argc, char *argv[])
     {
         std::cout << "All results gathered on master.\n";
 
+        // independently recompute C[0] using a plain loop over the original A and B
+        // to verify the distributed computation produced a mathematically correct result,
+        // not just that it ran without crashing
         double expected = 0.0;
         for (int k = 0; k < size; k++)
         {

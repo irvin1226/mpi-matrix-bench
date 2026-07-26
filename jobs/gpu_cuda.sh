@@ -4,7 +4,7 @@
 #CLUSTER --ntasks=2
 #CLUSTER --profile=gpu-cuda
 #CLUSTER --matrix-size=1024
-#CLUSTER --memory=256MB
+#CLUSTER --memory=64MB
 #CLUSTER -t 0:02:00
 
 # bring up the cluster
