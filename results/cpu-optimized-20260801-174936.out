@@ -1,0 +1,23 @@
+=== Job Configuration ===
+Profile: cpu-optimized
+Nodes: 3 workers + 1 master
+Processes: 4
+Matrix size: 1024
+Memory limit: 32mb
+==========================
+master-1  |  * Starting OpenBSD Secure Shell server sshd
+master-1  |    ...done.
+master-1  | Warning: Permanently added 'node1' (ED25519) to the list of known hosts.
+master-1  | Warning: Permanently added 'node2' (ED25519) to the list of known hosts.
+master-1  | Warning: Permanently added 'node3' (ED25519) to the list of known hosts.
+master-1  | Process 1 received its data.
+master-1  | Process 2 received its data.
+master-1  | Process 0 received its data.
+master-1  | Process 3 received its data.
+master-1  | Process 1 finished multiplying in 0.10357 seconds.
+master-1  | Process 2 finished multiplying in 0.101079 seconds.
+master-1  | Process 3 finished multiplying in 0.100244 seconds.
+master-1  | Process 0 finished multiplying in 0.102016 seconds.
+master-1  | All results gathered on master.
+master-1  | Verification: C[0] = 239.678, expected = 239.678 [PASSED]
+master-1  | Total job time: 0.293122 seconds.

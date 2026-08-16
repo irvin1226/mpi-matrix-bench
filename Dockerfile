@@ -29,6 +29,6 @@ RUN chmod +x ./entrypoint.sh
 ARG PROFILE=naive
 
 # compile only the source file matching this profile
-RUN mpic++ -o ./src/matrix_mult ./src/matrix_mult_${PROFILE}.cpp
+RUN mpic++ -O2 -o ./src/matrix_mult ./src/matrix_mult_${PROFILE}.cpp
 
 ENTRYPOINT ["./entrypoint.sh"]

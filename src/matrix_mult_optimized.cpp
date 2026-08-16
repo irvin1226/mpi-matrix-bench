@@ -25,14 +25,12 @@ void multiplyRows(
 {
     for (int i = 0; i < rowsPerProcess; i++)
     {
-        for (int j = 0; j < size; j++)
+        for (int k = 0; k < size; k++)
         {
-            double sum = 0.0;
-            for (int k = 0; k < size; k++)
+            for (int j = 0; j < size; j++)
             {
-                sum += A[i * size + k] * B[k * size + j];
+                C[i * size + j] += A[i * size + k] * B[k * size + j];
             }
-            C[i * size + j] = sum;
         }
     }
 }
@@ -61,7 +59,7 @@ int main(int argc, char *argv[])
     std::vector<double> B(size * size);
     std::vector<double> C(size * size, 0.0);
     std::vector<double> subA(rowsPerProcess * size);
-    std::vector<double> subC(rowsPerProcess * size);
+    std::vector<double> subC(rowsPerProcess * size, 0.0);
 
     if (mpiRank == 0)
     {
