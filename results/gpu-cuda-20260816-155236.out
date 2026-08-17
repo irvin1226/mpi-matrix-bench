@@ -1,0 +1,17 @@
+=== Job Configuration ===
+Profile: gpu-cuda
+Nodes: 1 workers + 1 master
+Processes: 2
+Matrix size: 1024
+Memory limit: 32mb
+==========================
+master-1  |  * Starting OpenBSD Secure Shell server sshd
+master-1  |    ...done.
+master-1  | Warning: Permanently added 'node1' (ED25519) to the list of known hosts.
+master-1  | --------------------------------------------------------------------------
+master-1  | Primary job  terminated normally, but 1 process returned
+master-1  | a non-zero exit code. Per user-direction, the job has been aborted.
+master-1  | --------------------------------------------------------------------------
+master-1  | --------------------------------------------------------------------------
+master-1  | mpirun noticed that process rank 0 with PID 0 on node master exited on signal 9 (Killed).
+master-1  | --------------------------------------------------------------------------

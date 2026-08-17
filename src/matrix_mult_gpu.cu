@@ -6,7 +6,9 @@
 #include <string>
 #include <cmath>
 
-void initMatrix(std::vector<double> &matrix, int size)
+using Matrix = std::vector<double>;
+
+void initMatrix(Matrix &matrix, int size)
 {
     for (int i = 0; i < (size * size); i++)
     {
@@ -16,25 +18,44 @@ void initMatrix(std::vector<double> &matrix, int size)
     }
 }
 
-void multiplyRows(
-    const std::vector<double> &A,
-    const std::vector<double> &B,
-    std::vector<double> &C,
-    int rowsPerProcess,
-    int size)
+__global__ void multiplyKernel(double *A, double *B, double *C, int size)
 {
-    for (int i = 0; i < rowsPerProcess; i++)
+    int row = blockIdx.y * blockDim.y + threadIdx.y;
+    int col = blockIdx.x * blockDim.x + threadIdx.x;
+
+    double sum = 0.0;
+    for (int k = 0; k < size; k++)
     {
-        for (int j = 0; j < size; j++)
-        {
-            double sum = 0.0;
-            for (int k = 0; k < size; k++)
-            {
-                sum += A[i * size + k] * B[k * size + j];
-            }
-            C[i * size + j] = sum;
-        }
+        sum += A[row * size + k] * B[k * size + col];
     }
+    C[row * size + col] = sum;
+}
+
+void multiplyOnGPU(Matrix &subA, Matrix &B, Matrix &subC, int rowsPerProcess, int size)
+{
+    size_t chunkBytes = sizeof(double) * (rowsPerProcess * size);
+    size_t fullMatrixBytes = sizeof(double) * (size * size);
+
+    double *d_subA;
+    double *d_B;
+    double *d_subC;
+    cudaMalloc(&d_subA, chunkBytes);
+    cudaMalloc(&d_B, fullMatrixBytes);
+    cudaMalloc(&d_subC, chunkBytes);
+
+    cudaMemcpy(d_subA, subA.data(), chunkBytes, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_B, B.data(), fullMatrixBytes, cudaMemcpyHostToDevice);
+
+    dim3 threadsPerBlock(16, 16);
+    dim3 numBlocks(size / 16, rowsPerProcess / 16);
+
+    multiplyKernel<<<numBlocks, threadsPerBlock>>>(d_subA, d_B, d_subC, size);
+    cudaDeviceSynchronize();
+    cudaMemcpy(subC.data(), d_subC, chunkBytes, cudaMemcpyDeviceToHost);
+
+    cudaFree(d_subA);
+    cudaFree(d_B);
+    cudaFree(d_subC);
 }
 
 int main(int argc, char *argv[])
@@ -57,11 +78,11 @@ int main(int argc, char *argv[])
     int size = std::stoi(matrixSizeEnv);
     int rowsPerProcess = size / mpiSize;
 
-    std::vector<double> A(size * size);
-    std::vector<double> B(size * size);
-    std::vector<double> C(size * size, 0.0);
-    std::vector<double> subA(rowsPerProcess * size);
-    std::vector<double> subC(rowsPerProcess * size);
+    Matrix A(size * size);
+    Matrix B(size * size);
+    Matrix C(size * size, 0.0);
+    Matrix subA(rowsPerProcess * size);
+    Matrix subC(rowsPerProcess * size);
 
     if (mpiRank == 0)
     {
@@ -77,7 +98,9 @@ int main(int argc, char *argv[])
     std::cout << "Process " << mpiRank << " received its data.\n";
 
     auto start = std::chrono::high_resolution_clock::now();
-    multiplyRows(subA, B, subC, rowsPerProcess, size);
+
+    multiplyOnGPU(subA, B, subC, rowsPerProcess, size);
+    
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
 

@@ -1,0 +1,49 @@
+networks:
+  mpi-network:
+    driver: bridge
+
+services:
+  master:
+    build:
+      context: .
+      dockerfile: Dockerfile.gpu
+    hostname: master
+    environment:
+      - MPI_ROLE=master
+      - MPI_PROCESSES=${MPI_PROCESSES}
+      - MPI_PROFILE=${MPI_PROFILE}
+      - MPI_NODE_COUNT=${MPI_NODE_COUNT}
+      - MATRIX_SIZE=${MATRIX_SIZE}
+    volumes:
+      - ./results:/app/results
+    networks:
+      - mpi-network
+    mem_limit: ${MEM_LIMIT}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  node1:
+    build:
+      context: .
+      dockerfile: Dockerfile.gpu
+    hostname: node1
+    environment:
+      - MPI_ROLE=worker
+      - MPI_PROFILE=${MPI_PROFILE}
+      - MPI_NODE_COUNT=${MPI_NODE_COUNT}
+      - MATRIX_SIZE=${MATRIX_SIZE}
+    networks:
+      - mpi-network
+    mem_limit: ${MEM_LIMIT}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
