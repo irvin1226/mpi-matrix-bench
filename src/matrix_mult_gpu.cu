@@ -50,6 +50,13 @@ void multiplyOnGPU(Matrix &subA, Matrix &B, Matrix &subC, int rowsPerProcess, in
     dim3 numBlocks(size / 16, rowsPerProcess / 16);
 
     multiplyKernel<<<numBlocks, threadsPerBlock>>>(d_subA, d_B, d_subC, size);
+
+    cudaError_t err = cudaGetLastError();
+    if (err != cudaSuccess)
+    {
+        std::cout << "CUDA kernel launch failed: " << cudaGetErrorString(err) << "\n";
+    }
+
     cudaDeviceSynchronize();
     cudaMemcpy(subC.data(), d_subC, chunkBytes, cudaMemcpyDeviceToHost);
 
@@ -100,7 +107,7 @@ int main(int argc, char *argv[])
     auto start = std::chrono::high_resolution_clock::now();
 
     multiplyOnGPU(subA, B, subC, rowsPerProcess, size);
-    
+
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
 
