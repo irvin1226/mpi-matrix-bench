@@ -15,11 +15,23 @@ if [ "$MPI_ROLE" = "master" ]; then
     sleep 5
 
     # run the MPI job across all nodes
+    if [ "$MPI_PROFILE" = "gpu-cuda" ]; then
     mpirun --hostfile /app/hostfile \
        --allow-run-as-root \
        -x MATRIX_SIZE \
+       -x NVIDIA_VISIBLE_DEVICES \
+       -x NVIDIA_DRIVER_CAPABILITIES \
+       -x PATH \
+       -x LD_LIBRARY_PATH \
        -np $MPI_PROCESSES \
        /app/src/matrix_mult
+    else
+        mpirun --hostfile /app/hostfile \
+        --allow-run-as-root \
+        -x MATRIX_SIZE \
+        -np $MPI_PROCESSES \
+        /app/src/matrix_mult
+    fi
 else
     # worker node, just keep container alive and wait for master
     echo "Worker node ready, waiting for master..."
