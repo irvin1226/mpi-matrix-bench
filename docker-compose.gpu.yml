@@ -19,13 +19,7 @@ services:
     networks:
       - mpi-network
     mem_limit: ${MEM_LIMIT}
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+    gpus: all
 
   node1:
     build:
@@ -40,10 +34,4 @@ services:
     networks:
       - mpi-network
     mem_limit: ${MEM_LIMIT}
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+    gpus: all
