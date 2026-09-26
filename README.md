@@ -2,6 +2,8 @@
 
 A simulated HPC cluster built with Docker, MPI, and CUDA, comparing naive and optimized CPU implementations against a GPU implementation of distributed matrix multiplication.
 
+Project page: [irvinoc.com/projects/mpi-matrix-bench](https://www.irvinoc.com/projects/mpi-matrix-bench)
+
 ## Key Results
 
 | Profile | Avg Per-Process Time | Total Job Time |
